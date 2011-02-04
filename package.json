@@ -1,0 +1,29 @@
+{ "name": "embedly"
+, "version": "0.1.0"
+, "description": "Embedly library for node"
+, "homepage": "https://github.com/embedly/embedly-node"
+, "keywords": []
+, "author": 
+  { "name": "Bob Corsaro"
+  , "email": "bob@embed.ly"
+  , "url": "http://www.google.com/profiles/rcorsaro"
+  }
+, "repository":
+  { "type": "git"
+  , "url": "git://github.com/embedly/embedly-node"
+  }
+, "bugs": { "web": "http://github.com/embedly/embedly-node/issues/" }
+, "directories":
+  { "doc": "./docs"
+  , "lib": "./lib"
+  , "test": "./test"
+  }
+, "dependencies": {}
+, "main": "./lib/embedly.js"
+, "scripts": { "test": "node test/all.js" }
+, "bin": 
+  { "embedly_oembed": "bin/embedly_oembed.js"
+  , "embedly_objectify": "bin/embedly_objectify.js"
+  , "embedly_preview": "bin/embedly_preview.js"
+  }
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 var path = require('path')
+  , method = path.basename(__filename).match(/^embedly_([^.]+)(\.js)?$/)[1]
 
 require.paths.unshift(path.join(__dirname, '../lib'))
 
@@ -41,7 +42,8 @@ while (args.length) {
 }
 
 var api = new embedly.api()
-api.oembed({
-  urls: urls
+api[method]({
+  params: { urls: urls }
+, complete: function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }
 })
 

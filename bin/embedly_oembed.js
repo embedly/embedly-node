@@ -8,7 +8,13 @@ var embedly = require("embedly")
 
 var args = process.argv.slice(2)
 
-var usage = 
+var opts = {
+    host: null
+  , key: process.env.EMBEDLY_KEY
+  , params: {urls: []}
+}
+
+var usage =
   [ 'Fetch JSON from the embedly oembed service.'
   , 'Usage embedly_oembed.js [OPTIONS] <url> [url]..'
   , ''
@@ -28,7 +34,6 @@ var usage =
 ].join('\n')
 
 var arg
-var urls = []
 while (args.length) {
   arg = args.shift()
   switch (arg) {
@@ -36,14 +41,23 @@ while (args.length) {
     case '--help':
       console.log(usage)
       process.exit()
+    case '-k':
+    case '--key':
+      opts.key = args.shift()
+      break
+    case '-o':
+    case '--option':
+      kv = args.shift().split('=')
+      opts.options[kv[0]] = kv[1]
+      break
     default:
-      urls.push(arg)
+      opts.params.urls.push(arg)
   }
 }
 
-var api = new embedly.api()
+var api = new embedly.api({'key': opts.key, 'host': opts.host})
 api[method]({
-  params: { urls: urls }
+  params: opts.params
 , complete: function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }
 })
 

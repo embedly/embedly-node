@@ -58,6 +58,6 @@ while (args.length) {
 var api = new embedly.api({'key': opts.key, 'host': opts.host})
 api[method]({
   params: opts.params
-, complete: function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }
+, complete: function(err, objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }
 })
 

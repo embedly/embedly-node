@@ -51,7 +51,7 @@ function assertObjValue(name, expected) {
  *      When oembed is called with the <url> URL
  *      Then the provider_url should be <provider_url>
  */
-var provider_url_vows = {}
+var oembed_provider_url_vows = {}
 /*
  * Examples:
  ** url                                             | provider_url            */
@@ -64,7 +64,7 @@ var provider_url_vows = {}
     , url = parts[0].trim()
     , expected = parts[1].trim()
 
-  provider_url_vows['when oembed is called for provider with url '+url] = {
+  oembed_provider_url_vows['when oembed is called for provider with url '+url] = {
     topic: function (api) {
       return api.oembed(
         { params:{'url': url}
@@ -82,7 +82,7 @@ var provider_url_vows = {}
  *      When oembed is called with the <url> URL
  *      Then the type should be <type>
  */
-var type_vows = {}
+var oembed_type_vows = {}
 /*
  * Examples:
  ** url                                             | type  */
@@ -95,7 +95,7 @@ var type_vows = {}
     , url = parts[0].trim()
     , expected = parts[1].trim()
 
-  type_vows['when oembed is called for type with url '+url] = {
+  oembed_type_vows['when oembed is called for type with url '+url] = {
     topic: function (api) {
       return api.oembed(
         { params:{'url': url}
@@ -108,11 +108,49 @@ var type_vows = {}
 })
 
 /*
+ *  Scenario Outline: Get the provider_url with pro
+ *      Given an embedly endpoint with key
+ *      When oembed is called with the <url> URL
+ *      Then the provider_url should be <provider_url>
+ */
+var oembed_pro_provider_vows = {}
+/*
+ * Examples:
+ ** url                                                                              | provider_url               */
+;[" http://blog.embed.ly/bob                                                         | http://posterous.com       "
+, " http://blog.doki-pen.org/cassandra-rules                                         | http://posterous.com       "
+, " http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk/ "
+].forEach(function(line) {
+  var parts = line.split('|')
+    , url = parts[0].trim()
+    , expected = parts[1].trim()
+
+  oembed_pro_provider_vows['when pro oembed is called for provider with url '+url] = {
+    topic: function (api) {
+      return api.oembed(
+        { params:{'url': url}
+        , complete: this.callback
+        }
+      )
+    }
+    , 'reponds with provider_url': assertObjValue('provider_url', expected)
+  }
+})
+
+/*
  * Build vows
  */
 vows.describe('OEmbed').addBatch({
-  'An API instance': Hash({
-    topic: new(embedly.api)
-  }).merge(provider_url_vows).merge(type_vows).end
+    'An API instance': Hash({
+      topic: new(embedly.api)
+    }).
+    merge(oembed_provider_url_vows).
+    merge(oembed_type_vows).
+    end
+  , 'A Pro API Instance': Hash({
+      topic: new(embedly.api)({key: process.env.EMBEDLY_KEY})
+    }).
+    merge(oembed_pro_provider_vows).
+    end
 }).export(module)
 

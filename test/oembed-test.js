@@ -196,6 +196,37 @@ var oembed_pro_provider_vows = {}
 })
 
 /*
+ *  Scenario Outline: Attempt to get 404 URL
+ *      Given an embedly endpoint
+ *      When oembed is called with the <url> URL
+ *      Then type should be error
+ *      And error_code should be 404
+ *      And type should be error
+ */
+var oembed_404_vows = {}
+/*
+ * Examples:
+ ** url                                                       */
+;[" http://www.youtube.com/watch/is/a/bad/url                 "
+, " http://www.scribd.com/doc/zfldsf/asdfkljlas/klajsdlfkasdf "
+, " http://tweetphoto.com/alsdfldsf/asdfkljlas/klajsdlfkasdf  "
+].forEach(function(line) {
+  var url = line.trim()
+
+  oembed_404_vows['when oembed is called with a 404 url '+url] = {
+    topic: function (api) {
+      return api.oembed(
+        { params:{'url': url}
+        , complete: this.callback
+        }
+      )
+    }
+    , 'reponds with expected error_code': assertObjValue('error_code', '404')
+    , 'reponds with expected type': assertObjValue('type', 'error')
+  }
+})
+
+/*
  * Build vows
  */
 vows.describe('OEmbed').addBatch({
@@ -206,6 +237,7 @@ vows.describe('OEmbed').addBatch({
     merge(oembed_type_vows).
     merge(oembed_provider_with_force_vows).
     merge(oembed_multiple_provider_vows).
+    merge(oembed_404_vows).
     end
   , 'A Pro API Instance': Hash({
       topic: new(embedly.api)({key: process.env.EMBEDLY_KEY})

@@ -20,6 +20,12 @@ var embedly = require('embedly')
 /*
  * HELPERS
  */
+function canonize_value(val) {
+  return (typeof(val) == 'undefined' || val == null) ?
+           '' 
+         : val
+}
+
 /*
  * assert that a response obj arrays properties (names) match
  * an array of expected values.  name can be a period seperated
@@ -40,7 +46,7 @@ function assertObjValue(name, expected) {
       var value = name.split('.').reduce(function(o, field) {
         return o[field]
       }, obj)
-      assert.equal(value, expect)
+      assert.equal(canonize_value(value), expect)
     })
   }
 }
@@ -227,6 +233,56 @@ var oembed_404_vows = {}
 })
 
 /*
+ *  Scenario Outline: Attempt multi get 404 URLs
+ *      Given an embedly endpoint
+ *      When oembed is called with the <urls> URLs
+ *      Then error_code should be <errcode>
+ *      And type should be <types>
+ */
+var oembed_404_multi_vows = {}
+/*      Examples:
+ ** urls                                                                             | errcode | types       */
+;[" http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error "
+, " http://www.scribd.com/doc/lsbsdlfldsf/kl,http://www.scribd.com/doc/zasdf/asdfl   | 404,404 | error,error "
+, " http://www.youtube.com/watch/zzzzasdf/kl,http://tweetphoto.com/14784358          | 404,    | error,photo "
+, " http://tweetphoto.com/14784358,http://www.scribd.com/doc/asdfasdfasdf            | ,404    | photo,error "
+].forEach(function(line) {
+  var parts = line.split('|')
+    , urls = parts[0].trim().split(',')
+    , error_codes = parts[1].trim().split(',')
+    , types = parts[2].trim().split(',')
+
+  oembed_404_multi_vows['when oembed is called with a 404 urls '+urls.join(',')] = {
+    topic: function (api) {
+      return api.oembed(
+        { params:{'urls': urls}
+        , complete: this.callback
+        }
+      )
+    }
+    , 'reponds with expected error_codes': assertObjValue('error_code', error_codes)
+    , 'reponds with expected types': assertObjValue('type', types)
+  }
+})
+        
+/*
+    Scenario Outline: Attempt at non-api service without key
+        Given an embedly endpoint
+        When oembed is called with the <url> URL
+        Then error_code should be 401
+        And error_message should be This service requires an Embedly Pro account
+        And type should be error
+
+        Examples:
+            | urls                                                                             | 
+            | http://hn.embed.ly/                                                              | 
+            | http://bit.ly/enZRxO                                                             | 
+            | http://techcrunch.com/2011/02/03/linkedins-next-data-dive-professional-skills/   | 
+            | http://teachertube.com/rssPhoto.php                                              | 
+            | http://goo.gl/y1i9p                                                              | 
+            */
+
+/*
  * Build vows
  */
 vows.describe('OEmbed').addBatch({
@@ -238,6 +294,7 @@ vows.describe('OEmbed').addBatch({
     merge(oembed_provider_with_force_vows).
     merge(oembed_multiple_provider_vows).
     merge(oembed_404_vows).
+    merge(oembed_404_multi_vows).
     end
   , 'A Pro API Instance': Hash({
       topic: new(embedly.api)({key: process.env.EMBEDLY_KEY})

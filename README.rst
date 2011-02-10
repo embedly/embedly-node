@@ -8,11 +8,11 @@ visit `http://embed.ly`_.  To see our api documentation, visit
 Installing
 ^^^^^^^^^^
 
-To install the official latest stable version, please use rubygems.
+To install the official latest stable version, please use npm::
 
   npm install embedly
 
-If you would like cutting edge, then you can clone and install HEAD.
+If you would like cutting edge, then you can clone and install HEAD::
 
   git clone git@github.com:embedly/embedly-node.git
   cd embedly-node
@@ -20,6 +20,8 @@ If you would like cutting edge, then you can clone and install HEAD.
 
 Getting Started
 ^^^^^^^^^^^^^^^
+
+Here are some examples::
 
   var embedly = require('embedly')
     , util = require('util')
@@ -49,10 +51,12 @@ Getting Started
 Testing
 ^^^^^^^
 
+Run vows::
+
   vows
 
 Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
-variable with your key to get them to pass.
+variable with your key to get them to pass::
 
   EMBEDLY_KEY=xxxxxxxxxxxxx vows
 

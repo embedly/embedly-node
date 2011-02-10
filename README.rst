@@ -32,8 +32,7 @@ Here are some examples::
 
   var embedly = require('embedly')
     , util = require('util')
-
-  api = new embedly.api()
+    , api = new embedly.api()
 
   // call single url
   api.oembed({

@@ -99,6 +99,21 @@ Logging
 
 We are using syslog for logging.  Check /var/log/messages on most systems.
 
+Here is a simple configuration that I use on my dev box (syslog-ng)::
+
+  # doki_pen is my username
+  destination messages { file("/var/log/messages"); };
+  destination embedly { file("/var/log/embedly-node" owner(doki_pen) group(doki_pen)); };
+  filter f_embedly { program(embedly); };
+  filter f_not_embedly { not program(embedly); };
+  log { source(src); filter(f_embedly); destination(embedly); };
+  log { source(src); filter(f_not_embedly); destination(messages); };
+  log { source(src); filter(f_not_embedly); destination(console_all); };
+
+This puts embedly logs in /var/log/embedly-node with good permissions and 
+keeps them out of /var/log/messages.  I'm no master of syslog-ng, so buyer
+beware.
+
 Note on Patches/Pull Requests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

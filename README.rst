@@ -28,12 +28,12 @@ Here are some examples::
 
   api = new embedly.api()
 
-  # single url
+  // single url
   var objs = api.oembed({url: 'http://blog.embed.ly'})
 
   console.log(util.inspect(obj[0])
 
-  # multiple urls with opts
+  // multiple urls with opts
   objs = api.oembed({
     urls: ['http://blog.embed.ly', 'http://blog.doki-pen.org'],
     maxWidth: 450,
@@ -42,7 +42,7 @@ Here are some examples::
   })
   console.log(util.inspect(objs))
 
-  # call pro with key (you'll need a real key)
+  // call pro with key (you'll need a real key)
   pro = new embedly.api({key: 'xxxxxxxxxxxxxxxxxxxxxxxxxx'})
   objs = pro.preview({url:
     'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'})

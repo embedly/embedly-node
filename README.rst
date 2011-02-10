@@ -1,10 +1,12 @@
-= embedly
+embedly
+-------
 
 Embedly node client library.  To find out what Embedly is all about, please
-visit http://embed.ly.  To see our api documentation, visit
-http://api.embed.ly/docs.
+visit `http://embed.ly`_.  To see our api documentation, visit
+`http://api.embed.ly/docs`_.
 
-== Installing
+Installing
+^^^^^^^^^^
 
 To install the official latest stable version, please use rubygems.
 
@@ -16,7 +18,8 @@ If you would like cutting edge, then you can clone and install HEAD.
   cd embedly-node
   npm install
 
-== Getting Started
+Getting Started
+^^^^^^^^^^^^^^^
 
   var embedly = require('embedly')
     , util = require('util')
@@ -43,7 +46,8 @@ If you would like cutting edge, then you can clone and install HEAD.
     'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'})
   console.log(util.inspect(objs[0]))
 
-== Testing
+Testing
+^^^^^^^
 
   vows
 
@@ -54,17 +58,19 @@ variable with your key to get them to pass.
 
 We have provided some commandline tools to test the Embedly interface.
 
-  * embedly_oembed.js
-  * embedly_objectify.js
-  * embedly_preview.js
+* `embedly_oembed.js`
+* `embedly_objectify.js`
+* `embedly_preview.js`
 
 Using --help with the commands should give you a good idea of how to use them.
 
-== Logging
+Logging
+^^^^^^^
 
 We are using syslog for logging.  Check /var/log/messages on most systems.
 
-== Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -74,6 +80,7 @@ We are using syslog for logging.  Check /var/log/messages on most systems.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+Copyright
+^^^^^^^^^
 
 Copyright (c) 2011 Embed.ly, Inc. See MIT-LICENSE for details.

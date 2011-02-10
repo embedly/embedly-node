@@ -266,21 +266,38 @@ var oembed_404_multi_vows = {}
 })
         
 /*
-    Scenario Outline: Attempt at non-api service without key
-        Given an embedly endpoint
-        When oembed is called with the <url> URL
-        Then error_code should be 401
-        And error_message should be This service requires an Embedly Pro account
-        And type should be error
+ *  Scenario Outline: Attempt at non-api service without key
+ *      Given an embedly endpoint
+ *      When oembed is called with the <url> URL
+ *      Then error_code should be 401
+ *      And error_message should be This service requires an Embedly Pro account
+ *      And type should be error
+ */
+var oembed_non_provider_vows = {}
+/* 
+ * Examples: 
+ ** urls                                                                            */
+;[" http://hn.embed.ly/                                                             " 
+, " http://bit.ly/enZRxO                                                            " 
+, " http://techcrunch.com/2011/02/03/linkedins-next-data-dive-professional-skills/  " 
+, " http://teachertube.com/rssPhoto.php                                             " 
+, " http://goo.gl/y1i9p                                                             " 
+].forEach(function(line) {
+  var url = line.trim()
 
-        Examples:
-            | urls                                                                             | 
-            | http://hn.embed.ly/                                                              | 
-            | http://bit.ly/enZRxO                                                             | 
-            | http://techcrunch.com/2011/02/03/linkedins-next-data-dive-professional-skills/   | 
-            | http://teachertube.com/rssPhoto.php                                              | 
-            | http://goo.gl/y1i9p                                                              | 
-            */
+  oembed_non_provider_vows['when oembed is called with a unsupported url '+url] = {
+    topic: function (api) {
+      return api.oembed(
+        { params:{'url': url}
+        , complete: this.callback
+        }
+      )
+    }
+    , 'reponds with expected error_codes': assertObjValue('error_code', '401')
+    , 'reponds with expected error_messages': assertObjValue('error_message', 'This service requires an Embedly Pro account')
+    , 'reponds with expected types': assertObjValue('type', 'error')
+  }
+})
 
 /*
  * Build vows
@@ -295,6 +312,7 @@ vows.describe('OEmbed').addBatch({
     merge(oembed_multiple_provider_vows).
     merge(oembed_404_vows).
     merge(oembed_404_multi_vows).
+    merge(oembed_non_provider_vows).
     end
   , 'A Pro API Instance': Hash({
       topic: new(embedly.api)({key: process.env.EMBEDLY_KEY})

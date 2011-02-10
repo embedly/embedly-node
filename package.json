@@ -18,7 +18,7 @@
   , "lib": "./lib"
   , "test": "./test"
   }
-, "dependencies": {}
+, "dependencies": {'node-syslog', 'vows', 'traverse'}
 , "main": "./lib/embedly.js"
 , "scripts": { "test": "node test/all.js" }
 , "bin": 

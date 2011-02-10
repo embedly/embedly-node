@@ -28,25 +28,45 @@ Here are some examples::
 
   api = new embedly.api()
 
-  // single url
-  var objs = api.oembed({url: 'http://blog.embed.ly'})
-
-  console.log(util.inspect(obj[0])
-
-  // multiple urls with opts
-  objs = api.oembed({
-    urls: ['http://blog.embed.ly', 'http://blog.doki-pen.org'],
-    maxWidth: 450,
-    wmode: 'transparent',
-    method: 'after'
+  // call single url
+  api.oembed({
+      params: {
+         url: 'http://www.youtube.com/watch?v=Zk7dDekYej0'
+      }
+    , complete: function(e,objs) {
+      console.log('--------------------------------------------------------------')
+      console.log('1. ')
+      console.log(util.inspect(objs[0]))
+    }
   })
-  console.log(util.inspect(objs))
+
+  // call multiple urls with parameters
+  api.oembed({
+      params: {
+          urls: ['http://www.youtube.com/watch?v=Zk7dDekYej0', 'http://plixi.com/p/16044847']
+        , maxWidth: 450
+        , wmode: 'transparent'
+        , method: 'after'
+      }
+    , complete: function(e, objs) {
+        console.log('--------------------------------------------------------------')
+        console.log('2. ')
+        console.log(util.inspect(objs))
+      }
+  })
 
   // call pro with key (you'll need a real key)
-  pro = new embedly.api({key: 'xxxxxxxxxxxxxxxxxxxxxxxxxx'})
-  objs = pro.preview({url:
-    'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'})
-  console.log(util.inspect(objs[0]))
+  pro = new embedly.api({key: 'xxxxxxxxxxxx'})
+  pro.preview({
+      params: {
+          url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'
+      }
+    , complete: function(e, objs) {
+        console.log('--------------------------------------------------------------')
+        console.log('3. ')
+        console.log(util.inspect(objs[0]))
+    }
+  })
 
 Testing
 ^^^^^^^

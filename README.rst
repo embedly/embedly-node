@@ -77,15 +77,6 @@ Here are some examples::
 Testing
 ^^^^^^^
 
-Run vows::
-
-  vows
-
-Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
-variable with your key to get them to pass::
-
-  EMBEDLY_KEY=xxxxxxxxxxxxx vows
-
 We have provided some commandline tools to test the Embedly interface.
 
 * `embedly_oembed.js`
@@ -113,6 +104,23 @@ Here is a simple configuration that I use on my dev box (syslog-ng)::
 This puts embedly logs in /var/log/embedly-node with good permissions and 
 keeps them out of /var/log/messages.  I'm no master of syslog-ng, so buyer
 beware.
+
+Develop
+^^^^^^^
+
+Run link::
+  
+  npm link
+
+Run tests::
+
+  npm test
+
+Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
+variable with your key to get them to pass::
+
+  EMBEDLY_KEY=xxxxxxxxxxxxx npm test
+
 
 Note on Patches/Pull Requests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

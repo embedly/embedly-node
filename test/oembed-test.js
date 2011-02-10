@@ -10,6 +10,7 @@ var vows = require('vows')
   , path = require('path')
   , Syslog = require('node-syslog').Syslog
   , Hash = require('traverse/hash')
+  , util = require('util')
 
 Syslog.init("embedly-test", Syslog.LOG_PID | Syslog.LOG_ODELAY, Syslog.LOG_INFO)
 
@@ -35,8 +36,16 @@ function canonize_value(val) {
  */
 function assertObjValue(name, expected) {
   return function(e, objs) {
-    var expect = expected;
-    var isString = typeof(expected) == 'string'
+    var expect = expected
+      , isString = typeof(expected) == 'string'
+
+    Syslog.log(Syslog.LOG_DEBUG, util.inspect(objs))
+
+    if (typeof(expected) == 'string') {
+      assert.ok(objs.length >= 1)
+    } else {
+      assert.ok(expected.length <= objs.length)
+    }
 
     objs.forEach(function(obj,i) {
       // if expected is a string, then the same expected

@@ -9,7 +9,12 @@ var vows = require('vows')
   , assert = require('assert')
   , path = require('path')
   , Hash = require('traverse/hash')
-  , util = require('util')
+
+try {
+  var util = require('util')
+} catch(e) {
+  var util = require('utils')
+}
 
 require.paths.unshift(path.join(__dirname, '../lib'))
 

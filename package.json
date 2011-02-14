@@ -1,9 +1,9 @@
 { name: "embedly"
 , version: "0.1.6"
-, description: "Embedly library for node"
+, description: "Embedly client library for node"
 , homepage: "https://github.com/embedly/embedly-node"
 , keywords: []
-, author: 
+, author:
   { name: "Bob Corsaro"
   , email: "bob@embed.ly"
   , url: "http://www.google.com/profiles/rcorsaro"
@@ -22,7 +22,7 @@
 , devDependencies: {"vows": ">= 0.5.6", "node-syslog": "= 0.6.0"}
 , main: "./lib/embedly.js"
 , scripts: { "test": "vows" }
-, bin: 
+, bin:
   { embedly_oembed: "bin/embedly_oembed.js"
   , embedly_objectify: "bin/embedly_objectify.js"
   , embedly_preview: "bin/embedly_preview.js"

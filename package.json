@@ -1,5 +1,5 @@
 { name: "embedly"
-, version: "0.1.4"
+, version: "0.1.6"
 , description: "Embedly library for node"
 , homepage: "https://github.com/embedly/embedly-node"
 , keywords: []

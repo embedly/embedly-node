@@ -32,7 +32,7 @@ Here are some examples::
 
   var embedly = require('embedly')
     , util = require('util')
-    , api = new embedly.api()
+    , api = new embedly.api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
 
   // call single url
   api.oembed({
@@ -62,7 +62,7 @@ Here are some examples::
   })
 
   // call pro with key (you'll need a real key)
-  pro = new embedly.api({key: 'xxxxxxxxxxxx'})
+  pro = new embedly.api({key: 'xxxxxxxxxxxx', user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
   pro.preview({
       params: {
           url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'

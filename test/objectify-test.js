@@ -8,11 +8,13 @@
 var vows = require('vows')
   , assert = require('assert')
   , path = require('path')
-  , Syslog = require('node-syslog').Syslog
   , Hash = require('traverse/hash')
-  , util = require('util')
 
-Syslog.init("embedly-test", Syslog.LOG_PID | Syslog.LOG_ODELAY, Syslog.LOG_INFO)
+try {
+  var util = require('util')
+} catch(e) {
+  var util = require('utils')
+}
 
 require.paths.unshift(path.join(__dirname, '../lib'))
 
@@ -39,11 +41,7 @@ function assertObjValueStartsWith(name, expected) {
     var expect = expected;
     var isString = typeof(expected) == 'string'
 
-    Syslog.log(Syslog.LOG_DEBUG, '**********************************************************************************************************')
-    Syslog.log(Syslog.LOG_DEBUG, util.inspect(e))
-    Syslog.log(Syslog.LOG_DEBUG, '**********************************************************************************************************')
-    Syslog.log(Syslog.LOG_DEBUG, util.inspect(objs))
-    Syslog.log(Syslog.LOG_DEBUG, '**********************************************************************************************************')
+    embedly.log.debug(objs)
 
     objs.forEach(function(obj,i) {
       // if expected is a string, then the same expected
@@ -53,8 +51,6 @@ function assertObjValueStartsWith(name, expected) {
       var value = name.split('.').reduce(function(o, field) {
         return o[field]
       }, obj)
-      Syslog.log(Syslog.LOG_DEBUG, canonize_value(value))
-      Syslog.log(Syslog.LOG_DEBUG, canonize_value(expect))
       assert.ok(canonize_value(value).match(expect))
       assert.equal(canonize_value(value).match(expect).index, 0)
     })

@@ -8,11 +8,13 @@
 var vows = require('vows')
   , assert = require('assert')
   , path = require('path')
-  , Syslog = require('node-syslog').Syslog
   , Hash = require('traverse/hash')
-  , util = require('util')
 
-Syslog.init("embedly-test", Syslog.LOG_PID | Syslog.LOG_ODELAY, Syslog.LOG_INFO)
+try {
+  var util = require('util')
+} catch(e) {
+  var util = require('utils')
+}
 
 require.paths.unshift(path.join(__dirname, '../lib'))
 
@@ -39,7 +41,7 @@ function assertObjValue(name, expected) {
     var expect = expected
       , isString = typeof(expected) == 'string'
 
-    Syslog.log(Syslog.LOG_DEBUG, util.inspect(objs))
+    embedly.log.debug(objs)
 
     if (typeof(expected) == 'string') {
       assert.ok(objs.length >= 1)

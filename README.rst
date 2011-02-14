@@ -32,8 +32,7 @@ Here are some examples::
 
   var embedly = require('embedly')
     , util = require('util')
-
-  api = new embedly.api()
+    , api = new embedly.api()
 
   // call single url
   api.oembed({
@@ -78,15 +77,6 @@ Here are some examples::
 Testing
 ^^^^^^^
 
-Run vows::
-
-  vows
-
-Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
-variable with your key to get them to pass::
-
-  EMBEDLY_KEY=xxxxxxxxxxxxx vows
-
 We have provided some commandline tools to test the Embedly interface.
 
 * `embedly_oembed.js`
@@ -99,6 +89,38 @@ Logging
 ^^^^^^^
 
 We are using syslog for logging.  Check /var/log/messages on most systems.
+
+Here is a simple configuration that I use on my dev box (syslog-ng)::
+
+  # doki_pen is my username
+  destination messages { file("/var/log/messages"); };
+  destination embedly { file("/var/log/embedly-node" owner(doki_pen) group(doki_pen)); };
+  filter f_embedly { program(embedly); };
+  filter f_not_embedly { not program(embedly); };
+  log { source(src); filter(f_embedly); destination(embedly); };
+  log { source(src); filter(f_not_embedly); destination(messages); };
+  log { source(src); filter(f_not_embedly); destination(console_all); };
+
+This puts embedly logs in /var/log/embedly-node with good permissions and 
+keeps them out of /var/log/messages.  I'm no master of syslog-ng, so buyer
+beware.
+
+Develop
+^^^^^^^
+
+Run link::
+  
+  npm link
+
+Run tests::
+
+  npm test
+
+Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
+variable with your key to get them to pass::
+
+  EMBEDLY_KEY=xxxxxxxxxxxxx npm test
+
 
 Note on Patches/Pull Requests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

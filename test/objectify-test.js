@@ -36,8 +36,6 @@ function assertObjValueStartsWith(name, expected) {
     var expect = expected;
     var isString = typeof(expected) == 'string'
 
-    embedly.log.debug(objs)
-
     objs.forEach(function(obj,i) {
       // if expected is a string, then the same expected
       // value should be used against all objects

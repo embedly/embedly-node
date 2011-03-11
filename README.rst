@@ -74,21 +74,28 @@ Here are some examples::
     }
   })
 
-Testing
-^^^^^^^
+Configuration
+^^^^^^^^^^^^^
 
-We have provided some commandline tools to test the Embedly interface.
+If `log` library is used for logging, then logging can be configured via
+environmental variables.  Log levels are described on the `visionmedia/log.js
+<https://github.com/visionmedia/log.js>`_ website and are defined with the
+EMBEDLY_LOG_LEVEL variable::
 
-* `embedly_oembed.js`
-* `embedly_objectify.js`
-* `embedly_preview.js`
+  export EMBEDLY_LOG_LEVEL="debug"
+  npm test
 
-Using --help with the commands should give you a good idea of how to use them.
+By default, logging will happen on stdout out.  To get it to a file, use
+the EMBEDLY_LOG_FILE variable.  Make sure the path to the file exists
+and permissions are correct::
 
-Logging
-^^^^^^^
+  export EMBEDLY_LOG_LEVEL="debug"
+  export EMBEDLY_LOG_FILE="embedly.log"
+  npm test
+  cat embedly.log
 
-We are using syslog for logging.  Check /var/log/messages on most systems.
+node-syslog is also supported, although I've had bad luck with it.  Try
+version 0.6.0.  Check /var/log/messages on most systems.
 
 Here is a simple configuration that I use on my dev box (syslog-ng)::
 
@@ -104,6 +111,18 @@ Here is a simple configuration that I use on my dev box (syslog-ng)::
 This puts embedly logs in /var/log/embedly-node with good permissions and 
 keeps them out of /var/log/messages.  I'm no master of syslog-ng, so buyer
 beware.
+
+Testing
+^^^^^^^
+
+We have provided some commandline tools to test the Embedly interface.
+
+* `embedly_oembed.js`
+* `embedly_objectify.js`
+* `embedly_preview.js`
+
+Using --help with the commands should give you a good idea of how to use them.
+
 
 Develop
 ^^^^^^^

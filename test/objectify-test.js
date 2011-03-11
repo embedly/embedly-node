@@ -5,20 +5,15 @@
  *   I want to call the the embedly api
  *   Because I want to objectify a url
  */
+require.paths.unshift(require('path').join(__dirname, '../lib'))
+
 var vows = require('vows')
+  , embedly = require('embedly')
+  , require_either = embedly.utils.require_either
   , assert = require('assert')
   , path = require('path')
-  , Hash = require('traverse/hash')
-
-try {
-  var util = require('util')
-} catch(e) {
-  var util = require('utils')
-}
-
-require.paths.unshift(path.join(__dirname, '../lib'))
-
-var embedly = require('embedly')
+  , Hash = require_either('hashish', 'traverse/hash')
+  , util = require_either('util', 'utils')
 
 /*
  * HELPERS
@@ -37,7 +32,7 @@ function canonize_value(val) {
  * value to each obj, then expected can be a string value.
  */
 function assertObjValueStartsWith(name, expected) {
-  return function(e, objs) {
+  return function(objs) {
     var expect = expected;
     var isString = typeof(expected) == 'string'
 
@@ -76,11 +71,7 @@ var objectify_pro_meta_vows = {}
 
   objectify_pro_meta_vows['when objectify is called on pro for metadesc with url '+url] = {
     topic: function (api) {
-      return api.objectify(
-        { params:{'url': url}
-        , complete: this.callback
-        }
-      )
+      return api.objectify({'url': url}).on('complete', this.callback).start()
     }
     , 'reponds with expected metadesc': assertObjValueStartsWith('meta.description', metadesc)
   }
@@ -91,9 +82,9 @@ var objectify_pro_meta_vows = {}
  */
 vows.describe('Objectify').addBatch({
     'A Pro API Instance': Hash({
-      topic: new(embedly.api)({key: process.env.EMBEDLY_KEY})
+      topic: new(embedly.Api)({key: process.env.EMBEDLY_KEY})
     }).
     merge(objectify_pro_meta_vows).
     end
-}).export(module)
+}).export(module, {error: false})
 

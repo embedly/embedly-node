@@ -1,5 +1,5 @@
 { name: "embedly"
-, version: "0.1.6"
+, version: "0.3.0"
 , description: "Embedly client library for node"
 , homepage: "https://github.com/embedly/embedly-node"
 , keywords: []
@@ -18,7 +18,7 @@
   , lib: "./lib"
   , test: "./test"
   }
-, dependencies: {"traverse": ">= 0.2.4", "qs": ""}
+, dependencies: {"hashish": "", "qs": ""}
 , devDependencies: {"vows": ">= 0.5.6", "node-syslog": "= 0.6.0"}
 , main: "./lib/embedly.js"
 , scripts: { "test": "vows" }

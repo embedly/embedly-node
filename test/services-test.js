@@ -40,6 +40,14 @@ vows.describe('Services').addBatch(
         assert.isTrue(typeof(repl) == 'object')
       }
     }
+  , 'gets services regex':
+    { topic: function(api) {
+        return api.services_regex().on('complete', this.callback).start()
+      }
+    , 'response with services': function(repl) {
+        assert.isTrue(repl instanceof RegExp)
+      }
+    }
   }
 }).export(module, {error: false})
 

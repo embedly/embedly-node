@@ -9,7 +9,10 @@ Prerequisites
 ^^^^^^^^^^^^^
 
 * nodejs - Available in most package managers
-* `npm <http://npmjs.org/>`_ - If you have no idea how to install it for a dev environment, feel free to check about `my blog <http://blog.doki-pen.org/installing-nodejs-npm-sanely>`_ about it.  I'm not trying to self-promote, I just really couldn't find any simple instructions. 
+* `npm <http://npmjs.org/>`_ - If you have no idea how to install it for a dev
+  environment, feel free to check about `my blog
+  <http://blog.doki-pen.org/installing-nodejs-npm-sanely>`_ about it.  I'm not
+  trying to self-promote, I just really couldn't find any simple instructions. 
 
 
 Installing
@@ -31,48 +34,40 @@ Getting Started
 Here are some examples::
 
   var embedly = require('embedly')
-    , util = require('util')
-    , api = new embedly.api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
+    , require_either = embedly.utils.require_either
+    , util = require_either('util', 'utils')
+    , Api = embedly.Api
+    , api = new Api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
+
 
   // call single url
-  api.oembed({
-      params: {
-         url: 'http://www.youtube.com/watch?v=Zk7dDekYej0'
-      }
-    , complete: function(e,objs) {
-      console.log('--------------------------------------------------------------')
-      console.log('1. ')
-      console.log(util.inspect(objs[0]))
-    }
-  })
+  api.oembed({url: 'http://www.youtube.com/watch?v=Zk7dDekYej0'}).on('complete', function(objs) {
+    console.log('--------------------------------------------------------------')
+    console.log('1. ')
+    console.log(util.inspect(objs[0]))
+  }).start()
 
   // call multiple urls with parameters
-  api.oembed({
-      params: {
-          urls: ['http://www.youtube.com/watch?v=Zk7dDekYej0', 'http://plixi.com/p/16044847']
-        , maxWidth: 450
-        , wmode: 'transparent'
-        , method: 'after'
-      }
-    , complete: function(e, objs) {
-        console.log('--------------------------------------------------------------')
-        console.log('2. ')
-        console.log(util.inspect(objs))
-      }
-  })
+  api.oembed(
+    { urls: ['http://www.youtube.com/watch?v=Zk7dDekYej0', 'http://plixi.com/p/16044847']
+    , maxWidth: 450
+    , wmode: 'transparent'
+    , method: 'after'
+    }
+  ).on('complete', function(objs) {
+    console.log('--------------------------------------------------------------')
+    console.log('2. ')
+    console.log(util.inspect(objs))
+  }).start()
 
   // call pro with key (you'll need a real key)
-  pro = new embedly.api({key: 'xxxxxxxxxxxx', user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
-  pro.preview({
-      params: {
-          url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'
-      }
-    , complete: function(e, objs) {
-        console.log('--------------------------------------------------------------')
-        console.log('3. ')
-        console.log(util.inspect(objs[0]))
-    }
-  })
+  pro = new Api({key: 'xxxxxxxxxxxx', user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
+  pro.preview({url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'}).
+    on('complete', function(objs) {
+      console.log('--------------------------------------------------------------')
+      console.log('3. ')
+      console.log(util.inspect(objs[0]))
+    }).start()
 
 Configuration
 ^^^^^^^^^^^^^

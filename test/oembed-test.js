@@ -141,9 +141,9 @@ var oembed_provider_with_force_vows = {}
 var oembed_multiple_provider_vows = {}
 /*
  * Examples:
- ** urls                                                                                      | provider_urls                                 */
-;[" http://www.scribd.com/doc/13994900/Easter,http://www.scribd.com/doc/28452730/Easter-Cards | http://www.scribd.com/,http://www.scribd.com/ "
-, " http://www.youtube.com/watch?v=Zk7dDekYej0,http://plixi.com/p/16044847                    | http://www.youtube.com/,http://plixi.com      "
+ ** urls                                                                                                                                      | provider_urls                                 */
+;[" http://www.scribd.com/doc/13994900/Easter,http://www.scribd.com/doc/28452730/Easter-Cards                                                 | http://www.scribd.com/,http://www.scribd.com/ "
+, " http://www.youtube.com/watch?v=Zk7dDekYej0,http://confreaks.net/videos/160-rubyconf2009-bert-and-ernie-scaling-your-ruby-site-with-erlang | http://www.youtube.com/,http://confreaks.net  "
 ].forEach(function(line) {
   var parts = line.split('|')
     , urls = parts[0].trim()
@@ -169,7 +169,7 @@ var oembed_pro_provider_vows = {}
  * Examples:
  ** url                                                                              | provider_url               */
 ;[" http://blog.embed.ly/bob                                                         | http://posterous.com       "
-, " http://blog.doki-pen.org/cassandra-rules                                         | http://posterous.com       "
+, " http://blog.embed.ly/boston-hack-day                                             | http://posterous.com       "
 , " http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk/ "
 ].forEach(function(line) {
   var parts = line.split('|')

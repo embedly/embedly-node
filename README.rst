@@ -45,6 +45,9 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
     console.log('--------------------------------------------------------------')
     console.log('1. ')
     console.log(util.inspect(objs[0]))
+  }).on('error', function(e) {
+    console.error('request #1 failed')
+    console.error(e)
   }).start()
 
   // call multiple urls with parameters
@@ -58,6 +61,9 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
     console.log('--------------------------------------------------------------')
     console.log('2. ')
     console.log(util.inspect(objs))
+  }).on('error', function(e) {
+    console.error('request #2 failed')
+    console.error(e)
   }).start()
 
   api = new Api({key: 'xxxxxxxxxxxx', user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
@@ -66,6 +72,9 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
       console.log('--------------------------------------------------------------')
       console.log('3. ')
       console.log(util.inspect(objs[0]))
+    }).on('error', function(e) {
+      console.error('request #2 failed')
+      console.error(e)
     }).start()
 
 Configuration

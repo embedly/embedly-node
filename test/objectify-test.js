@@ -69,17 +69,22 @@ var objectify_pro_meta_vows = {}
 
   objectify_pro_meta_vows['when objectify is called on pro for metadesc with url '+url] = {
     topic: function (api) {
-      return api.objectify({'url': url}).on('complete', this.callback).start()
+      return api.objectify({'url': url}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected metadesc': assertObjValueStartsWith('meta.description', metadesc)
   }
 })
 
+function catch_error(e) {
+  console.error('an error occurred')
+  console.error(e)
+}
+
 /*
  * Build vows
  */
 vows.describe('Objectify').addBatch({
-    'A Pro API Instance': Hash({
+    'An API Instance': Hash({
       topic: new(embedly.Api)({key: process.env.EMBEDLY_KEY})
     }).
     merge(objectify_pro_meta_vows).

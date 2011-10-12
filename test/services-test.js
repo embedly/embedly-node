@@ -26,12 +26,17 @@ function canonize_value(val) {
          : val
 }
 
+function catch_error(e) {
+  console.error('an error occurred')
+  console.error(e)
+}
+
 /*
  * Build vows
  */
 vows.describe('Services').addBatch(
-{ 'A Pro API Instance':
-  { topic: new(embedly.Api)()
+{ 'An API Instance':
+  { topic: new(embedly.Api)({key: null})
   , 'gets services':
     { topic: function(api) {
         return api.services().on('complete', this.callback).start()

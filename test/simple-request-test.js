@@ -75,6 +75,10 @@ var parse_host = function(host) {
   return { 'url': url, 'protocol': protocol, 'hostname': hostname, 'port': port }
 }
 
+function catch_error(e) {
+  console.error('an error occurred')
+  console.error(e)
+}
 
 /*
  * Build vows
@@ -85,6 +89,7 @@ vows.describe('Simple Request').addBatch(
       var host = parse_host('http://www.google.com/')
       simple_request(host, 'GET', '/', {Host: host.hostname}).
                             on('complete', this.callback).
+                            on('error', catch_error).
                             start()
     }
   , 'responsewithservices': function(result) {assert.isTrue(result.length > 10000)}

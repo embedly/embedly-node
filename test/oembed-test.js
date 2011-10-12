@@ -75,7 +75,7 @@ var oembed_provider_url_vows = {}
 
   oembed_provider_url_vows['when oembed is called for provider with url '+url] = {
     topic: function (api) {
-      return api.oembed({url: url}).on('complete', this.callback).start()
+      return api.oembed({url: url}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected provider_url': assertObjValue('provider_url', expected)
   }
@@ -102,7 +102,7 @@ var oembed_type_vows = {}
 
   oembed_type_vows['when oembed is called for type with url '+url] = {
     topic: function (api) {
-      return api.oembed({url: url}).on('complete', this.callback).start()
+      return api.oembed({url: url}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected type': assertObjValue('type', expected)
   }
@@ -126,7 +126,7 @@ var oembed_provider_with_force_vows = {}
 
   oembed_provider_with_force_vows['when oembed is called with force for provider with url '+url] = {
     topic: function (api) {
-      return api.oembed({url: url, force: 'true'}).on('complete', this.callback).start()
+      return api.oembed({url: url, force: 'true'}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected provider_url': assertObjValue('provider_url', expected)
   }
@@ -151,7 +151,7 @@ var oembed_multiple_provider_vows = {}
 
   oembed_multiple_provider_vows['when oembed is called for provider with multi-urls '+urls] = {
     topic: function (api) {
-      return api.oembed({urls: urls.split(','), force: 'true'}).on('complete', this.callback).start()
+      return api.oembed({urls: urls.split(','), force: 'true'}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected provider_url': assertObjValue('provider_url', expected.split(','))
   }
@@ -178,7 +178,7 @@ var oembed_pro_provider_vows = {}
 
   oembed_pro_provider_vows['when pro oembed is called for provider with url '+url] = {
     topic: function (api) {
-      return api.oembed({url: url}).on('complete', this.callback).start()
+      return api.oembed({url: url}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected provider_url': assertObjValue('provider_url', expected)
   }
@@ -203,7 +203,7 @@ var oembed_404_vows = {}
 
   oembed_404_vows['when oembed is called with a 404 url '+url] = {
     topic: function (api) {
-      return api.oembed({url: url}).on('complete', this.callback).start()
+      return api.oembed({url: url}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected error_code': assertObjValue('error_code', '404')
     , 'reponds with expected type': assertObjValue('type', 'error')
@@ -231,12 +231,18 @@ var oembed_404_multi_vows = {}
 
   oembed_404_multi_vows['when oembed is called with a 404 urls '+urls.join(',')] = {
     topic: function (api) {
-      return api.oembed({urls: urls}).on('complete', this.callback).start()
+      return api.oembed({urls: urls}).on('complete', this.callback).on('error', catch_error).start()
     }
     , 'reponds with expected error_codes': assertObjValue('error_code', error_codes)
     , 'reponds with expected types': assertObjValue('type', types)
   }
 })
+
+function catch_error(e) {
+  console.error('an error occurred')
+  console.error(e)
+}
+
         
 /*
  * Build vows
@@ -252,7 +258,7 @@ vows.describe('OEmbed').addBatch({
     merge(oembed_404_vows).
     merge(oembed_404_multi_vows).
     end
-  , 'A Pro API Instance': Hash({
+  , 'An API Instance': Hash({
       topic: new(embedly.Api)({key: process.env.EMBEDLY_KEY})
     }).
     merge(oembed_pro_provider_vows).

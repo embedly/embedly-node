@@ -52,5 +52,6 @@ while (args.length) {
 var api = new embedly.Api({'key': opts.key, 'host': opts.host})
 api[method](opts.params).
   on('complete', function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }).
+  on('error', function(e) { process.stdout.write(e+'\n') }).
   start()
 

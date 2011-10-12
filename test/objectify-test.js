@@ -61,7 +61,7 @@ var objectify_pro_meta_vows = {}
 /*
  * Examples:
  ** url                            | metadesc                  */
-;[" http://tweetphoto.com/14784358 | Plixi allows users to ins "
+;[" http://shapeshed.com/journal/using-rbenv-to-manage-rubies/ | How I use rbenv "
 ].forEach(function(line) {
   var parts = line.split('|')
     , url = parts[0].trim()

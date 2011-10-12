@@ -67,7 +67,7 @@ var oembed_provider_url_vows = {}
 ;[" http://www.scribd.com/doc/13994900/Easter       | http://www.scribd.com/  "
 , " http://www.scribd.com/doc/28452730/Easter-Cards | http://www.scribd.com/  "
 , " http://www.youtube.com/watch?v=Zk7dDekYej0      | http://www.youtube.com/ "
-, " http://tweetphoto.com/14784358                  | http://plixi.com        "
+, " http://imgur.com/gallery/ws4Ys                  | http://i.imgur.com/     "
 ].forEach(function(line) {
   var parts = line.split('|')
     , url = parts[0].trim()
@@ -94,7 +94,7 @@ var oembed_type_vows = {}
 ;[" http://www.scribd.com/doc/13994900/Easter       | rich  "
 , " http://www.scribd.com/doc/28452730/Easter-Cards | rich  "
 , " http://www.youtube.com/watch?v=Zk7dDekYej0      | video "
-, " http://tweetphoto.com/14784358                  | photo "
+, " http://imgur.com/gallery/ws4Ys                  | photo "
 ].forEach(function(line) {
   var parts = line.split('|')
     , url = parts[0].trim()
@@ -197,8 +197,7 @@ var oembed_404_vows = {}
  * Examples:
  ** url                                                       */
 ;[" http://www.youtube.com/watch/is/a/bad/url                 "
-, " http://www.scribd.com/doc/zfldsf/asdfkljlas/klajsdlfkasdf "
-, " http://tweetphoto.com/alsdfldsf/asdfkljlas/klajsdlfkasdf  "
+, " http://imgur.com/alzzzzzsdfldsf/asdfkljlas/klajsdlfkasdf  "
 ].forEach(function(line) {
   var url = line.trim()
 
@@ -222,9 +221,8 @@ var oembed_404_multi_vows = {}
 /*      Examples:
  ** urls                                                                             | errcode | types       */
 ;[" http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error "
-, " http://www.scribd.com/doc/lsbsdlfldsf/kl,http://www.scribd.com/doc/zasdf/asdfl   | 404,404 | error,error "
-, " http://www.youtube.com/watch/zzzzasdf/kl,http://tweetphoto.com/14784358          | 404,    | error,photo "
-, " http://tweetphoto.com/14784358,http://www.scribd.com/doc/asdfasdfasdf            | ,404    | photo,error "
+, " http://www.youtube.com/watch/zzzzasdf/kl,http://imgur.com/gallery/ws4Ys          | 404,    | error,photo "
+, " http://imgur.com/gallery/ws4Ys,http://www.youtube.com/watch/zzzzasdf/kl          | ,404    | photo,error "
 ].forEach(function(line) {
   var parts = line.split('|')
     , urls = parts[0].trim().split(',')
@@ -241,41 +239,11 @@ var oembed_404_multi_vows = {}
 })
         
 /*
- *  Scenario Outline: Attempt at non-api service without key
- *      Given an embedly endpoint
- *      When oembed is called with the <url> URL
- *      Then error_code should be 401
- *      And error_message should be This service requires an Embedly Pro account
- *      And type should be error
- */
-var oembed_non_provider_vows = {}
-/* 
- * Examples: 
- ** urls                                                                            */
-;[" http://hn.embed.ly/                                                             " 
-, " http://bit.ly/enZRxO                                                            " 
-, " http://techcrunch.com/2011/02/03/linkedins-next-data-dive-professional-skills/  " 
-, " http://teachertube.com/rssPhoto.php                                             " 
-, " http://goo.gl/y1i9p                                                             " 
-].forEach(function(line) {
-  var url = line.trim()
-
-  oembed_non_provider_vows['when oembed is called with a unsupported url '+url] = {
-    topic: function (api) {
-      return api.oembed({url: url}).on('complete', this.callback).start()
-    }
-    , 'reponds with expected error_codes': assertObjValue('error_code', '401')
-    , 'reponds with expected error_messages': assertObjValue('error_message', 'This service requires an Embedly Pro account')
-    , 'reponds with expected types': assertObjValue('type', 'error')
-  }
-})
-
-/*
  * Build vows
  */
 vows.describe('OEmbed').addBatch({
     'An API instance': Hash({
-      topic: new(embedly.Api)
+      topic: new embedly.Api({key: process.env.EMBEDLY_KEY})
     }).
     merge(oembed_provider_url_vows).
     merge(oembed_type_vows).
@@ -283,7 +251,6 @@ vows.describe('OEmbed').addBatch({
     merge(oembed_multiple_provider_vows).
     merge(oembed_404_vows).
     merge(oembed_404_multi_vows).
-    merge(oembed_non_provider_vows).
     end
   , 'A Pro API Instance': Hash({
       topic: new(embedly.Api)({key: process.env.EMBEDLY_KEY})

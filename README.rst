@@ -33,11 +33,13 @@ Getting Started
 
 Here are some examples *hint* replace xxxxxxxxxxx with real key::
 
+  var EMBEDLY_KEY = 'xxxxxxxxxxxxxx'
+
   var embedly = require('embedly')
     , require_either = embedly.utils.require_either
     , util = require_either('util', 'utils')
     , Api = embedly.Api
-    , api = new Api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)', key: 'xxxxxxxxxxxxx'})
+    , api = new Api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)', key: EMBEDLY_KEY})
 
 
   // call single url
@@ -66,7 +68,7 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
     console.error(e)
   }).start()
 
-  api = new Api({key: 'xxxxxxxxxxxx', user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
+  api = new Api({key: EMBEDLY_KEY, user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
   api.preview({url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'}).
     on('complete', function(objs) {
       console.log('--------------------------------------------------------------')

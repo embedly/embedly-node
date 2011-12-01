@@ -67,7 +67,7 @@ var oembed_provider_url_vows = {}
 ;[" http://www.scribd.com/doc/13994900/Easter       | http://www.scribd.com/  "
 , " http://www.scribd.com/doc/28452730/Easter-Cards | http://www.scribd.com/  "
 , " http://www.youtube.com/watch?v=Zk7dDekYej0      | http://www.youtube.com/ "
-, " http://imgur.com/gallery/ws4Ys                  | http://i.imgur.com/     "
+, " http://imgur.com/gallery/ws4Ys                  | http://imgur.com/       "
 ].forEach(function(line) {
   var parts = line.split('|')
     , url = parts[0].trim()

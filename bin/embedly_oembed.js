@@ -5,6 +5,7 @@ var method = require('path').basename(__filename).match(/^embedly_([^.]+)(\.js)?
   , args = process.argv.slice(2)
   , opts = 
     { host: null
+    , secure: false
     , key: process.env.EMBEDLY_KEY
     , params: {urls: []}
     }
@@ -19,6 +20,7 @@ var method = require('path').basename(__filename).match(/^embedly_([^.]+)(\.js)?
     , ' -k, --key                Embedly Pro key. [default:'
     , '                          EMBEDLY_KEY environmental variable]'
     , ' -o, --option NAME=VALUE  Set option to be passed as a query parameter.'
+    , ' -s, --secure             Use the secure HTTPS embedly endpoint.'
     , ''
     , 'Common Options:'
     , ' -v, --verbose            Run verbosely.'
@@ -44,12 +46,15 @@ while (args.length) {
       kv = args.shift().split('=')
       opts.params[kv[0]] = kv[1]
       break
+    case '-s':
+    case '--secure':
+      opts.secure = true;
     default:
       opts.params.urls.push(arg)
   }
 }
 
-var api = new embedly.Api({'key': opts.key, 'host': opts.host})
+var api = new embedly.Api(opts)
 api[method](opts.params).
   on('complete', function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }).
   on('error', function(e) { process.stdout.write(e+'\n') }).

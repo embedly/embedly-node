@@ -42,7 +42,7 @@ while (args.length) {
     case '-o':
     case '--option':
       kv = args.shift().split('=')
-      opts.options[kv[0]] = kv[1]
+      opts.params[kv[0]] = kv[1]
       break
     default:
       opts.params.urls.push(arg)

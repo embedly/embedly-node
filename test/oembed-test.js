@@ -166,8 +166,8 @@ var oembed_pro_provider_vows = {}
 /*
  * Examples:
  ** url                                                                              | provider_url               */
-;[" http://blog.embed.ly/bob                                                         | http://posterous.com       "
-, " http://blog.embed.ly/boston-hack-day                                             | http://posterous.com       "
+;[" http://blog.embed.ly/bob                                                         | http://blog.embed.ly/      "
+, " http://blog.embed.ly/boston-hack-day                                             | http://blog.embed.ly/      "
 , " http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk/ "
 ].forEach(function(line) {
   var parts = line.split('|')

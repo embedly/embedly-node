@@ -8,9 +8,7 @@
 
 var path = require('path')
 
-require.paths.unshift(path.join(__dirname, '../lib'))
-
-var embedly = require('embedly')
+var embedly = require('../')
   , vows = require('vows')
   , assert = require('assert')
   , Hash = embedly.utils.require_either('hashish', 'traverse/hash')

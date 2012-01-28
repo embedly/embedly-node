@@ -5,10 +5,8 @@
  *   I want to call the the embedly api
  *   Because I want to objectify a url
  */
-require.paths.unshift(require('path').join(__dirname, '../lib'))
-
 var vows = require('vows')
-  , embedly = require('embedly')
+  , embedly = require('../')
   , require_either = embedly.utils.require_either
   , assert = require('assert')
   , path = require('path')

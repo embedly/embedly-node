@@ -23,7 +23,6 @@ var method = require('path').basename(__filename).match(/^embedly_([^.]+)(\.js)?
     , ' -s, --secure             Use the secure HTTPS embedly endpoint.'
     , ''
     , 'Common Options:'
-    , ' -v, --verbose            Run verbosely.'
     , ' -h, --help               Display this message.'
     , ''
     , 'Bob Corsaro <bob@embed.ly>'

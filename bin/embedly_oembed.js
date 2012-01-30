@@ -49,6 +49,7 @@ while (args.length) {
     case '-s':
     case '--secure':
       opts.secure = true;
+      break
     default:
       opts.params.urls.push(arg)
   }

@@ -1,9 +1,8 @@
 #!/usr/bin/env node
-require.paths.unshift(require('path').join(__dirname, '../lib'))
 var method = require('path').basename(__filename).match(/^embedly_([^.]+)(\.js)?$/)[1]
-  , embedly = require("embedly")
+  , embedly = require("../lib/embedly")
   , args = process.argv.slice(2)
-  , opts = 
+  , opts =
     { host: null
     , key: process.env.EMBEDLY_KEY
     , params: {urls: []}

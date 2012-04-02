@@ -5,10 +5,8 @@
  *   I want to call the the embedly api
  *   Because I want and oembed for a specific url
  */
-require.paths.unshift(require('path').join(__dirname, '../lib'))
-
 var vows = require('vows')
-  , embedly = require('embedly')
+  , embedly = require('../lib/embedly')
   , require_either = embedly.utils.require_either
   , assert = require('assert')
   , Hash = require_either('hashish', 'traverse/hash')
@@ -19,7 +17,7 @@ var vows = require('vows')
  */
 function canonize_value(val) {
   return (typeof(val) == 'undefined' || val == null) ?
-           '' 
+           ''
          : val
 }
 
@@ -243,7 +241,7 @@ function catch_error(e) {
   console.error(e)
 }
 
-        
+
 /*
  * Build vows
  */

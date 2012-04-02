@@ -6,18 +6,8 @@
  *   Because I want to objectify a url
  */
 
-var path = require('path')
-
-//require.paths.unshift(path.join(__dirname, '../lib'))
-
-//var embedly_utils = require('embedly').utils
-//  , simple_request = embedly_utils.simple_request
-//  , parse_host = embedly_utils.parse_host
-//  , require_either = embedly_utils.require_either
 var vows = require('vows')
   , assert = require('assert')
-//  , Hash = require_either('hashish', 'traverse/hash')
-//  , util = require_either('util', 'utils')
   , Hash = require('hashish')
   , util = require('util')
   , http = require('http')

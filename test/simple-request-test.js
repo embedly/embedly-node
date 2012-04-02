@@ -9,9 +9,9 @@
 var vows = require('vows')
   , assert = require('assert')
   , Hash = require('hashish')
-  , util = require('util')
   , http = require('http')
   , EventEmitter = require('events').EventEmitter
+  , path = require('path')
 
 
 var simple_request = function(host, method, path, headers, callback) {

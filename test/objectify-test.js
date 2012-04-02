@@ -8,11 +8,8 @@
 
 var vows = require('vows')
   , embedly = require('../lib/embedly')
-  , require_either = embedly.utils.require_either
   , assert = require('assert')
-  , path = require('path')
-  , Hash = require_either('hashish', 'traverse/hash')
-  , util = require_either('util', 'utils')
+  , Hash = require('hashish')
 
 /*
  * HELPERS

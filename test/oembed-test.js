@@ -7,10 +7,8 @@
  */
 var vows = require('vows')
   , embedly = require('../lib/embedly')
-  , require_either = embedly.utils.require_either
   , assert = require('assert')
-  , Hash = require_either('hashish', 'traverse/hash')
-  , util = require_either('util', 'utils')
+  , Hash = require('hashish')
 
 /*
  * HELPERS
@@ -168,7 +166,7 @@ var oembed_pro_provider_vows = {}
  ** url                                                                              | provider_url               */
 ;[" http://blog.embed.ly/bob                                                         | http://posterous.com       "
 , " http://blog.embed.ly/boston-hack-day                                             | http://posterous.com       "
-, " http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk/ "
+, " http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk  "
 ].forEach(function(line) {
   var parts = line.split('|')
     , url = parts[0].trim()

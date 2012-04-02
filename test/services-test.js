@@ -9,8 +9,7 @@
 var embedly = require('../lib/embedly')
   , vows = require('vows')
   , assert = require('assert')
-  , Hash = embedly.utils.require_either('hashish', 'traverse/hash')
-  , util = embedly.utils.require_either('util', 'utils')
+  , Hash = require('hashish')
 
 
 /*

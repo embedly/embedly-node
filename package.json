@@ -31,5 +31,10 @@
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "bin": {
+    "embedly_oembed": "bin/embedly_oembed.js",
+    "embedly_objectify": "bin/embedly_objectify.js",
+    "embedly_preview": "bin/embedly_preview.js"
   }
 }

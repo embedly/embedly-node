@@ -7,7 +7,7 @@
  */
 
 var vows = require('vows')
-  , embedly = require('../lib/embedly')
+  , embedly = require('../')
   , assert = require('assert')
   , Hash = require('hashish')
 
@@ -16,7 +16,7 @@ var vows = require('vows')
  */
 function canonize_value(val) {
   return (typeof(val) == 'undefined' || val == null) ?
-           '' 
+           ''
          : val
 }
 

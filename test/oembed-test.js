@@ -6,7 +6,7 @@
  *   Because I want and oembed for a specific url
  */
 var vows = require('vows')
-  , embedly = require('../lib/embedly')
+  , embedly = require('../')
   , assert = require('assert')
   , Hash = require('hashish')
 

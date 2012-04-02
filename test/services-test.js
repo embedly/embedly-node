@@ -6,7 +6,7 @@
  *   Because I want to objectify a url
  */
 
-var embedly = require('../lib/embedly')
+var embedly = require('../')
   , vows = require('vows')
   , assert = require('assert')
   , Hash = require('hashish')
@@ -17,7 +17,7 @@ var embedly = require('../lib/embedly')
  */
 function canonize_value(val) {
   return (typeof(val) == 'undefined' || val == null) ?
-           '' 
+           ''
          : val
 }
 

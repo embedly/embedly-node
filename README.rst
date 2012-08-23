@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/embedly/embedly-node.png)](http://travis-ci.org/embedly/embedly-node)
 embedly
 -------
 

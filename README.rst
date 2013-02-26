@@ -36,8 +36,7 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
   var EMBEDLY_KEY = 'xxxxxxxxxxxxxx'
 
   var embedly = require('embedly')
-    , require_either = embedly.utils.require_either
-    , util = require_either('util', 'utils')
+    , util = require('util')
     , Api = embedly.Api
     , api = new Api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)', key: EMBEDLY_KEY})
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var method = require('path').basename(__filename).match(/^embedly_([^.]+)(\.js)?$/)[1]
+var method = require('path').basename(process.argv[1]).match(/^embedly_([^.]+)(\.js)?$/)[1]
   , embedly = require('../')
   , args = process.argv.slice(2)
   , opts =
-    { host: null
-    , secure: false
+    { host: 'api.embed.ly'
+    , proto: 'http'
     , key: process.env.EMBEDLY_KEY
     , params: {urls: []}
     }
@@ -47,16 +47,26 @@ while (args.length) {
       break
     case '-s':
     case '--secure':
-      opts.secure = true;
+      opts.proto = 'https';
       break
     default:
       opts.params.urls.push(arg)
   }
 }
 
-var api = new embedly.Api(opts)
-api[method](opts.params).
-  on('complete', function(objs) { process.stdout.write(JSON.stringify(objs,null,'\t')+'\n') }).
-  on('error', function(e) { process.stdout.write(e+'\n') }).
-  start()
+new embedly(opts, function(err, api) {
+  if (err) {
+    process.stderr.write(err.stack);
+    process.stderr.write(api);
+    process.exit(1);
+  }
+  api[method](opts.params, function(err, res) {
+    if (err) {
+      process.stderr.write(err.stack);
+      process.stderr.write(res);
+      process.exit(1);
+    }
+    process.stdout.write(JSON.stringify(res, null,'  ')+'\n');
+  });
+});
 

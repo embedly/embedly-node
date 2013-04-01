@@ -18,17 +18,19 @@
     "test": "./test"
   },
   "dependencies": {
-    "hashish": "0.0.4",
-    "urlparse.js": ""
+    "batbelt": "",
+    "superagent": "",
+    "sprintf": "",
+    "hashish": ""
   },
   "devDependencies": {
-    "vows": ">= 0.5.6"
+    "mocha": "1.8.2",
+    "should": "1.2.2",
+    "winston": ""
   },
-  "main": "./lib/embedly.js",
   "scripts": {
-    "test": "vows"
+    "test": "mocha"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": "*"
   },

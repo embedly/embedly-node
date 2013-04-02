@@ -22,7 +22,7 @@ function defaultLogger() {
       warn: bb.NOOP
     }
   }
-  return logging
+  return logger;
 }
 
 

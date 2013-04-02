@@ -4,6 +4,12 @@ embedly
 Embedly node client library.  To find out what Embedly is all about, please
 visit http://embed.ly.
 
+News
+^^^^
+
+* The embedly-node modules has been updated and simplified. It is not backward
+compatible. If you want to stick with the old API, use a verion < 1.0.
+
 Prerequisites
 ^^^^^^^^^^^^^
 
@@ -29,88 +35,90 @@ Getting Started
 
 Here are some examples *hint* replace xxxxxxxxxxx with real key::
 
-  var EMBEDLY_KEY = 'xxxxxxxxxxxxxx'
+  var EMBEDLY_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-  var embedly = require('embedly')
-    , util = require('util')
-    , Api = embedly.Api
-    , api = new Api({user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)', key: EMBEDLY_KEY})
+  var embedly = require('embedly'),
+      util = require('util');
 
-
-  // call single url
-  api.oembed({url: 'http://www.youtube.com/watch?v=Zk7dDekYej0'}).on('complete', function(objs) {
-    console.log('--------------------------------------------------------------')
-    console.log('1. ')
-    console.log(util.inspect(objs[0]))
-  }).on('error', function(e) {
-    console.error('request #1 failed')
-    console.error(e)
-  }).start()
-
-  // call multiple urls with parameters
-  api.oembed(
-    { urls: ['http://www.youtube.com/watch?v=Zk7dDekYej0', 'http://plixi.com/p/16044847']
-    , maxWidth: 450
-    , wmode: 'transparent'
-    , method: 'after'
+  new embedly({key: EMBEDLY_KEY}, function(err, api) {
+    if (!!err) {
+      console.error('Error creating Embedly api');
+      console.error(err.stack, api);
+      return;
     }
-  ).on('complete', function(objs) {
-    console.log('--------------------------------------------------------------')
-    console.log('2. ')
-    console.log(util.inspect(objs))
-  }).on('error', function(e) {
-    console.error('request #2 failed')
-    console.error(e)
-  }).start()
 
-  api = new Api({key: EMBEDLY_KEY, user_agent: 'Mozilla/5.0 (compatible; myapp/1.0; u@my.com)'})
-  api.preview({url: 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'}).
-    on('complete', function(objs) {
-      console.log('--------------------------------------------------------------')
-      console.log('3. ')
-      console.log(util.inspect(objs[0]))
-    }).on('error', function(e) {
-      console.error('request #2 failed')
-      console.error(e)
-    }).start()
+    // call single url
+    var url = 'http://www.youtube.com/watch?v=Zk7dDekYej0';
+    api.oembed({url: url}, function(err, objs) {
+      if (!!err) {
+        console.error('request #1 failed');
+        console.error(err.stack, objs);
+        return;
+      }
+      console.log('--------------------------------------------------------------');
+      console.log('1. ');
+      console.log(util.inspect(objs[0]));
+    });
 
-Configuration
-^^^^^^^^^^^^^
+    // call multiple urls with parameters
+    var urls = ['http://www.youtube.com/watch?v=Zk7dDekYej0',
+                'http://plixi.com/p/16044847'],
+        opts = { urls: urls,
+                 maxWidth: 450,
+                 wmode: 'transparent',
+                 method: 'after' };
 
-If `log` library is used for logging, then logging can be configured via
-environmental variables.  Log levels are described on the `visionmedia/log.js
-<https://github.com/visionmedia/log.js>`_ website and are defined with the
-EMBEDLY_LOG_LEVEL variable::
+    api.oembed(opts, function(err, objs) {
+        if (!!err) {
+          console.error('request #2 failed');
+          console.error(err.stack, objs);
+          return;
+        }
+        console.log('--------------------------------------------------------------');
+        console.log('2. ');
+        console.log(util.inspect(objs));
+    });
+  });
 
-  export EMBEDLY_LOG_LEVEL="debug"
-  npm test
+  new embedly({key: EMBEDLY_KEY}, function(err, api) {
+    var url = 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement';
+    api.preview({url: url}, function(err, objs) {
+      if (!!err) {
+        console.error('request #2 failed');
+        console.error(err.stack, objs);
+        return;
+      }
+      console.log('--------------------------------------------------------------');
+      console.log('3. ');
+      console.log(util.inspect(objs[0]));
+    });
+  });
 
-By default, logging will happen on stdout out.  To get it to a file, use
-the EMBEDLY_LOG_FILE variable.  Make sure the path to the file exists
-and permissions are correct::
+Authentication
+^^^^^^^^^^^^^^
 
-  export EMBEDLY_LOG_LEVEL="debug"
-  export EMBEDLY_LOG_FILE="embedly.log"
-  npm test
-  cat embedly.log
+If a key is not specified, the EMBEDLY_KEY environmental variable will be
+used. You can signup for an Embedly key at http://embed.ly.
 
-node-syslog is also supported, although I've had bad luck with it.  Try
-version 0.6.0.  Check /var/log/messages on most systems.
+Endpoints
+^^^^^^^^^
 
-Here is a simple configuration that I use on my dev box (syslog-ng)::
 
-  # doki_pen is my username
-  destination messages { file("/var/log/messages"); };
-  destination embedly { file("/var/log/embedly-node" owner(doki_pen) group(doki_pen)); };
-  filter f_embedly { program(embedly); };
-  filter f_not_embedly { not program(embedly); };
-  log { source(src); filter(f_embedly); destination(embedly); };
-  log { source(src); filter(f_not_embedly); destination(messages); };
-  log { source(src); filter(f_not_embedly); destination(console_all); };
 
-This puts embedly logs in /var/log/embedly-node with good permissions and 
-keeps them out of /var/log/messages.  I'm no master of syslog-ng, so buyer
-beware.
+Logging
+^^^^^^^
+
+`embedly-node` does provide some minimal logging to help diagnose problems. By default, a `winston` console logger with log level `error` will be created, but only if winston is installed. If you'd like more control over logging, you can create your own logger and pass it into embedly on instantiation. ex::
+
+  var embedly = require('embedly'),
+      winston = require('winston'),
+      logger = new (winston.Logger)({
+          transports: [new (winston.transports.Console)({ level: 'info' })]
+      });
+
+  new embedly({logger: logger}, function(err, api) {
+    // do stuff with api
+  });
 
 Testing
 ^^^^^^^
@@ -118,18 +126,13 @@ Testing
 We have provided some commandline tools to test the Embedly interface.
 
 * `embedly_oembed.js`
-* `embedly_objectify.js`
-* `embedly_preview.js`
+* `embedly_extract.js`
 
 Using --help with the commands should give you a good idea of how to use them.
 
 
 Develop
 ^^^^^^^
-
-Run link::
-  
-  npm link
 
 Run tests::
 

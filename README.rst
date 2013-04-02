@@ -2,17 +2,13 @@ embedly
 -------
 
 Embedly node client library.  To find out what Embedly is all about, please
-visit http://embed.ly.  To see our api documentation, visit
-http://api.embed.ly/docs.
+visit http://embed.ly.
 
 Prerequisites
 ^^^^^^^^^^^^^
 
 * nodejs - Available in most package managers
-* `npm <http://npmjs.org/>`_ - If you have no idea how to install it for a dev
-  environment, feel free to check about `my blog
-  <http://blog.doki-pen.org/installing-nodejs-npm-sanely>`_ about it.  I'm not
-  trying to self-promote, I just really couldn't find any simple instructions. 
+* `npm <http://npmjs.org/>`_
 
 
 Installing

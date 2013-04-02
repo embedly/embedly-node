@@ -55,7 +55,7 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
         console.error(err.stack, objs);
         return;
       }
-      console.log('--------------------------------------------------------------');
+      console.log('---------------------------------------------------------');
       console.log('1. ');
       console.log(util.inspect(objs[0]));
     });
@@ -74,21 +74,22 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
           console.error(err.stack, objs);
           return;
         }
-        console.log('--------------------------------------------------------------');
+        console.log('-------------------------------------------------------');
         console.log('2. ');
         console.log(util.inspect(objs));
     });
   });
 
   new embedly({key: EMBEDLY_KEY}, function(err, api) {
-    var url = 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement';
+    var url = ('http://www.guardian.co.uk/media/2011/jan' +
+               '/21/andy-coulson-phone-hacking-statement');
     api.preview({url: url}, function(err, objs) {
       if (!!err) {
         console.error('request #2 failed');
         console.error(err.stack, objs);
         return;
       }
-      console.log('--------------------------------------------------------------');
+      console.log('---------------------------------------------------------');
       console.log('3. ');
       console.log(util.inspect(objs[0]));
     });
@@ -98,12 +99,44 @@ Authentication
 ^^^^^^^^^^^^^^
 
 If a key is not specified, the EMBEDLY_KEY environmental variable will be
-used. You can signup for an Embedly key at http://embed.ly.
+used. You can signup for an Embedly key at http://embed.ly. Support for
+oauth will be added in a future version of the library.
+
+Creating an api object
+^^^^^^^^^^^^^^^^^^^^^^
+
+The embedly exported prototype function takes an `Object` of optional
+parameters to configure the Embedly API.
+
+ :key: Your Embedly consumer key.
+ :proto: The protocol to use when calling Embedly. The default is `http`.
+         `https` is also valid.
+ :logger: An `Object` that has prototype functions `error` `warn` and `debug`
+          that can be invoked with a single string argument.
+ :servicesRegexp: A regular expression object to match urls against before
+                  sending to the embedly API. Urls sent to an endpoint
+                  that don't match will be returned as 401 errors.
+
+There is a second, callback parameter that passes back an error and api
+parameter. It is possible in certain circumstances that the embedly api
+will fail to initialize properly. Therefore it is recommended to use the
+callback function and check for errors, like the example code above.
 
 Endpoints
 ^^^^^^^^^
 
+Embedly api endpoints are implemented as prototype functions on the api object.
+There are two endpoints implemented. See the Embedly API documentation for more
+details on the uses of the endpoints.
 
+ * oembed
+ * extract
+
+The endpoint functions accept an `Object` or parameters that are, for the most
+part, passed directly to the api as query parameters. The api does it's best
+to canonize the parameters before sending them. Sending more than 20 URLs at
+a time will fail. Future version of this library will batch requests of more
+than 20 URLs into batches whose size will be configurable.
 
 Logging
 ^^^^^^^

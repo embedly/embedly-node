@@ -1,6 +1,7 @@
 {
   "name": "embedly",
   "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Embedly client library for node",
   "homepage": "https://github.com/embedly/embedly-node",
   "keywords": [],
@@ -35,8 +36,7 @@
     "node": "*"
   },
   "bin": {
-    "embedly_oembed": "bin/embedly_oembed.js",
-    "embedly_objectify": "bin/embedly_objectify.js",
-    "embedly_preview": "bin/embedly_preview.js"
+    "embedly_extract": "./bin/embedly_generic.js",
+    "embedly_oembed": "./bin/embedly_generic.js"
   }
 }

@@ -19,14 +19,14 @@
   },
   "dependencies": {
     "batbelt": "0.0.2",
-    "superagent": "0.13.0",
+    "superagent": "0.21.0",
     "sprintf": "0.1.1",
     "hashish": "0.0.4"
   },
   "devDependencies": {
     "mocha": "1.8.2",
     "should": "1.2.2",
-    "winston": "0.6.2"
+    "winston": "0.8.2"
   },
   "scripts": {
     "test": "mocha"

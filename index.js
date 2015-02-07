@@ -163,17 +163,23 @@ embedly.prototype.apiCall = function(endpoint, version, params, callback) {
 
   params.urls = this.matchUrls(params.urls);
 
-  var query = querystring.stringify(params),
+  var query = '?' + querystring.stringify(params),
       self = this;
 
   if (params.urls.length > 0) {
     this.config.logger.debug('calling: ' + url + '?' + query);
-    request
+    // Appending our own querystring this way is complete and utter bullshit
+    // caused by this bug that is VERY VERY old (not to mention many others
+    // related to this braindamaged behavior). Since visionmedia has
+    // abandoned js, we should probably use a different http client lib.
+    //
+    // https://github.com/visionmedia/superagent/issues/128
+    var req = request
       .get(url)
-      .query(query)
       .set('User-Agent', this.config.userAgent)
-      .set('Accept', 'application/json')
-      .end(function(e, res) {
+      .set('Accept', 'application/json');
+    req.request().path += query;
+    req.end(function(e, res) {
         if (!!e) return callback(e)
         if (res.status >= 400) {
           self.config.logger.error(String(res.status), res.text);

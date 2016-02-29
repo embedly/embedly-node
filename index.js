@@ -178,7 +178,7 @@ embedly.prototype.apiCall = function(endpoint, version, params, callback) {
       .get(url)
       .set('User-Agent', this.config.userAgent)
       .set('Accept', 'application/json');
-    req.request().path += query;
+    req.query(params);
     req.end(function(e, res) {
         if (!!e) return callback(e)
         if (res.status >= 400) {

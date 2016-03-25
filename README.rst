@@ -95,6 +95,21 @@ Here are some examples *hint* replace xxxxxxxxxxx with real key::
     });
   });
 
+  new embedly({key: EMBEDLY_KEY, rateLimits: { extract: 10 }}, function(err, api) {
+    var url = ('http://www.guardian.co.uk/media/2011/jan' +
+               '/21/andy-coulson-phone-hacking-statement');
+    api.extract({url: url}, function(err, objs) {
+      if (!!err) {
+        console.error('request #3 failed');
+        console.error(err.stack, objs);
+        return;
+      }
+      console.log('---------------------------------------------------------');
+      console.log('4. ');
+      console.log(util.inspect(objs[0]));
+    });
+  });
+
 Authentication
 ^^^^^^^^^^^^^^
 

@@ -5,6 +5,8 @@ var bb = require('batbelt'),
     hashish = require('hashish'),
     querystring = require('querystring');
 
+var TimeQueue = require('timequeue');
+
 function defaultLogger() {
   try {
     var winston = require('winston')
@@ -36,6 +38,10 @@ function defaultLogger() {
 //
 // **secure** _Boolean_ Enables ssl
 //
+// **rateLimits** _Object_ An object that is used to provide rate limits for
+//                each api call. Possible keys are objectify, oembed, preview,
+//                and extract. By default they are set to _Infinity_.
+//
 // **logger** _Object_ An object that has debug, warn and error functions that
 //            except a single _String_ parameter. The `log` module is used by
 //            default.
@@ -53,6 +59,7 @@ function embedly(opts, callback) {
       preview: 1,
       extract: 1
     },
+    rateLimits: {},
     timeout: 200000,
     protocol: false,
     logger: null,
@@ -65,11 +72,21 @@ function embedly(opts, callback) {
 
   var self = this;
   hashish(this.config.apiVersion).forEach(function(version, action) {
+    var rateLimit = self.config.rateLimits[action];
+
+    var q = new TimeQueue(function () {
+      embedly.prototype.apiCall.apply(self, arguments);
+    }, {
+      concurrency: rateLimit || Infinity,
+      every: 1000
+    });
+
     self[action] = function() {
       var args = Array.prototype.slice.call(arguments, 0);
       args.unshift(version);
       args.unshift(action);
-      return embedly.prototype.apiCall.apply(self, args);
+
+      return q.push.apply(q, args);
     };
   });
 

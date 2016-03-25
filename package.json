@@ -19,9 +19,10 @@
   },
   "dependencies": {
     "batbelt": "0.0.2",
-    "superagent": "0.21.0",
+    "hashish": "0.0.4",
     "sprintf": "0.1.1",
-    "hashish": "0.0.4"
+    "superagent": "0.21.0",
+    "timequeue": "^0.2.2"
   },
   "devDependencies": {
     "mocha": "1.8.2",

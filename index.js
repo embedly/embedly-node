@@ -58,6 +58,8 @@ function embedly(opts, callback) {
     logger: null,
     servicesRegExp: null
   }, opts);
+  this.initDone = false;
+  this.initError = null;
 
   if (!this.config.logger) {
     this.config.logger = defaultLogger();
@@ -72,34 +74,44 @@ function embedly(opts, callback) {
       return embedly.prototype.apiCall.apply(self, args);
     };
   });
+  return self;
+}
 
-  if (!this.config.key && !this.config.servicesRegExp) {
-    var url = this.url('services/javascript', '1'),
-        errorMsg = 'Failed to fetch /1/services/javascript during init.';
+embedly.prototype._init = function(ctx, fn) {
+  if (!this.initDone) {
+    this.initDone = true;
+    if (!this.config.key && !this.config.servicesRegExp) {
+      var url = this.url('services/javascript', '1'),
+          errorMsg = 'Failed to fetch /1/services/javascript during init.';
 
-    request
-      .get(url)
-      .set('User-Agent', this.config.userAgent)
-      .set('Accept', 'application/json')
-      .end(function(e, res) {
-        if (!!e) return callback(e);
-        if (res.status >= 400) {
-          return callback(new Error(errorMsg), res);
-        }
-        try {
-          var services = JSON.parse(res.text),
-              regExpText = services.map(function(service) {
-                return service.regex.join("|");
-              }).join("|");
-          self.config.servicesRegExp = new RegExp(regExpText)
-        } catch(e) {
-          return callback(new Error(errorMsg), res);
-        }
-        callback(null, self);
-      })
+      request
+        .get(url)
+        .set('User-Agent', this.config.userAgent)
+        .set('Accept', 'application/json')
+        .end(function(e, res) {
+          if (!!e) return fn(ctx, e);
+          if (res.status >= 400) {
+            self.initError = new Error(errorMsg);
+            return fn(ctx, self.initError, res);
+          }
+          try {
+            var services = JSON.parse(res.text),
+                regExpText = services.map(function(service) {
+                  return service.regex.join("|");
+                }).join("|");
+            self.config.servicesRegExp = new RegExp(regExpText)
+          } catch(e) {
+            self.initError = new Error(errorMsg);
+            return fn(ctx, self.initError, res);
+          }
+          return fn(ctx, null, self);
+        })
 
+    } else {
+      return fn(ctx, null, this);
+    }
   } else {
-    callback(null, this);
+    return fn(ctx, this.initError, this);
   }
 };
 
@@ -152,44 +164,45 @@ embedly.prototype.serializeResponse = function(urls, resText) {
   });
 };
 
-embedly.prototype.apiCall = function(endpoint, version, params, callback) {
-  if (!params.key) {
-    params.key = this.config.key;
-  }
+embedly.prototype.apiCall = function(endpoint, version, q, fn) {
+  // The first parameter to _init is the context. For some reason wrapping
+  // them in a closure wasn't working. I gave up do to frustration, but this
+  // works.
+  this._init({endpoint: endpoint, version: version, q: q, fn: fn}, function(ctx, err, self) {
+    if (err) {
+      return ctx.fn(err);
+    }
 
-  var url = this.url(endpoint, version),
-      params = this.canonizeParams(params),
-      origUrls = params.urls.slice(0);
+    if (!ctx.q.key) {
+      ctx.q.key = self.config.key;
+    }
 
-  params.urls = this.matchUrls(params.urls);
+    var url = self.url(ctx.endpoint, ctx.version),
+        q = self.canonizeParams(ctx.q),
+        origUrls = q.urls.slice(0);
 
-  var query = '?' + querystring.stringify(params),
-      self = this;
+    q.urls = self.matchUrls(q.urls);
 
-  if (params.urls.length > 0) {
-    this.config.logger.debug('calling: ' + url + '?' + query);
-    // Appending our own querystring this way is complete and utter bullshit
-    // caused by this bug that is VERY VERY old (not to mention many others
-    // related to this braindamaged behavior). Since visionmedia has
-    // abandoned js, we should probably use a different http client lib.
-    //
-    // https://github.com/visionmedia/superagent/issues/128
-    var req = request
-      .get(url)
-      .set('User-Agent', this.config.userAgent)
-      .set('Accept', 'application/json');
-    req.request().path += query;
-    req.end(function(e, res) {
-        if (!!e) return callback(e)
-        if (res.status >= 400) {
-          self.config.logger.error(String(res.status), res.text);
-          return callback(new Error('Invalid response'), res.text);
-        }
-        callback(null, self.serializeResponse(origUrls, res.text))
-       });
-  } else {
-    callback(null, self.serializeResponse(origUrls, '[]'));
-  }
+    if (q.urls.length > 0) {
+      self.config.logger.debug('calling: ' + url + '?' + querystring.stringify(q));
+      var req = request
+        .get(url)
+        .set('User-Agent', self.config.userAgent)
+        .set('Accept', 'application/json');
+      req.query(querystring.stringify(q));
+      req.end(function(e, res) {
+          if (!!e) return ctx.fn(e)
+          if (res.status >= 400) {
+            self.config.logger.error(String(res.status), res.text);
+            return ctx.fn(new Error('Invalid response'), res.text);
+          }
+          return ctx.fn(null, self.serializeResponse(origUrls, res.text))
+         });
+    } else {
+      return ctx.fn(null, self.serializeResponse(origUrls, '[]'));
+    }
+  });
+  return q;
 };
 
 exports = module.exports = embedly

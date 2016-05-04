@@ -54,19 +54,12 @@ while (args.length) {
   }
 }
 
-new embedly(opts, function(err, api) {
+var api = new embedly(opts);
+api[method](opts.params, function(err, res) {
   if (err) {
     process.stderr.write(err.stack);
-    process.stderr.write(api);
+    process.stderr.write(res);
     process.exit(1);
   }
-  api[method](opts.params, function(err, res) {
-    if (err) {
-      process.stderr.write(err.stack);
-      process.stderr.write(res);
-      process.exit(1);
-    }
-    process.stdout.write(JSON.stringify(res, null,'  ')+'\n');
-  });
+  process.stdout.write(JSON.stringify(res, null,'  ')+'\n');
 });
-

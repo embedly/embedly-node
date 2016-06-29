@@ -1,4 +1,4 @@
-var bb = require('batbelt'),
+var _ = require('lodash'),
     pkg = require('./package.json'),
     request = require('superagent'),
     sprintf = require('sprintf').sprintf,
@@ -17,9 +17,9 @@ function defaultLogger() {
       console.warn('`npm install winston` or set logger in embedly for logging');
     }
     var logger = {
-      debug: bb.NOOP,
-      error: bb.NOOP,
-      warn: bb.NOOP
+      debug: _.noop,
+      error: _.noop,
+      warn: _.noop
     }
   }
   return logger;
@@ -43,7 +43,7 @@ function defaultLogger() {
 // **servicesRegexp** __RegExp__ A regular expression to match URLs against
 //                    before sending them to the Embedly API.
 function embedly(opts, callback) {
-  this.config = bb.merge({
+  this.config = _.merge({
     key: process.env['EMBEDLY_KEY'],
     host: 'api.embed.ly',
     userAgent: 'Mozilla/5.0 (compatible; embedly-node/' + pkg.version + ')',

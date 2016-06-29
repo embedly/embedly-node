@@ -18,7 +18,7 @@
     "test": "./test"
   },
   "dependencies": {
-    "batbelt": "0.0.2",
+    "lodash": "4.13.1",
     "superagent": "1.8.3",
     "sprintf": "0.1.1",
     "hashish": "0.0.4"

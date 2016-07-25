@@ -42,7 +42,7 @@ function defaultLogger() {
 //
 // **servicesRegexp** __RegExp__ A regular expression to match URLs against
 //                    before sending them to the Embedly API.
-function embedly(opts, callback) {
+function embedly(opts) {
   this.config = _.merge({
     key: process.env['EMBEDLY_KEY'],
     host: 'api.embed.ly',
@@ -58,8 +58,6 @@ function embedly(opts, callback) {
     logger: null,
     servicesRegExp: null
   }, opts);
-  this.initDone = false;
-  this.initError = null;
 
   if (!this.config.logger) {
     this.config.logger = defaultLogger();
@@ -76,44 +74,6 @@ function embedly(opts, callback) {
   });
   return self;
 }
-
-embedly.prototype._init = function(ctx, fn) {
-  if (!this.initDone) {
-    this.initDone = true;
-    if (!this.config.key && !this.config.servicesRegExp) {
-      var url = this.url('services/javascript', '1'),
-          errorMsg = 'Failed to fetch /1/services/javascript during init.';
-
-      request
-        .get(url)
-        .set('User-Agent', this.config.userAgent)
-        .set('Accept', 'application/json')
-        .end(function(e, res) {
-          if (!!e) return fn(ctx, e);
-          if (res.status >= 400) {
-            self.initError = new Error(errorMsg);
-            return fn(ctx, self.initError, res);
-          }
-          try {
-            var services = JSON.parse(res.text),
-                regExpText = services.map(function(service) {
-                  return service.regex.join("|");
-                }).join("|");
-            self.config.servicesRegExp = new RegExp(regExpText)
-          } catch(e) {
-            self.initError = new Error(errorMsg);
-            return fn(ctx, self.initError, res);
-          }
-          return fn(ctx, null, self);
-        })
-
-    } else {
-      return fn(ctx, null, this);
-    }
-  } else {
-    return fn(ctx, this.initError, this);
-  }
-};
 
 embedly.prototype.url = function(endpoint, version) {
   var proto = this.config.secure ? 'https' : 'http';
@@ -165,43 +125,36 @@ embedly.prototype.serializeResponse = function(urls, resText) {
 };
 
 embedly.prototype.apiCall = function(endpoint, version, q, fn) {
-  // The first parameter to _init is the context. For some reason wrapping
-  // them in a closure wasn't working. I gave up do to frustration, but this
-  // works.
-  this._init({endpoint: endpoint, version: version, q: q, fn: fn}, function(ctx, err, self) {
-    if (err) {
-      return ctx.fn(err);
-    }
+  var self = this;
 
-    if (!ctx.q.key) {
-      ctx.q.key = self.config.key;
-    }
+  if (!q.key) {
+    q.key = self.config.key;
+  }
 
-    var url = self.url(ctx.endpoint, ctx.version),
-        q = self.canonizeParams(ctx.q),
-        origUrls = q.urls.slice(0);
+  var url = self.url(endpoint, version),
+      q = self.canonizeParams(q),
+      origUrls = q.urls.slice(0);
 
-    q.urls = self.matchUrls(q.urls);
+  q.urls = self.matchUrls(q.urls);
 
-    if (q.urls.length > 0) {
-      self.config.logger.debug('calling: ' + url + '?' + querystring.stringify(q));
-      var req = request
-        .get(url)
-        .set('User-Agent', self.config.userAgent)
-        .set('Accept', 'application/json');
-      req.query(querystring.stringify(q));
-      req.end(function(e, res) {
-          if (!!e) return ctx.fn(e)
-          if (res.status >= 400) {
-            self.config.logger.error(String(res.status), res.text);
-            return ctx.fn(new Error('Invalid response'), res.text);
-          }
-          return ctx.fn(null, self.serializeResponse(origUrls, res.text))
-         });
-    } else {
-      return ctx.fn(null, self.serializeResponse(origUrls, '[]'));
-    }
-  });
+  if (q.urls.length > 0) {
+    self.config.logger.debug('calling: ' + url + '?' + querystring.stringify(q));
+    var req = request
+      .get(url)
+      .set('User-Agent', self.config.userAgent)
+      .set('Accept', 'application/json');
+    req.query(querystring.stringify(q));
+    req.end(function(e, res) {
+        if (!!e) return fn(e)
+        if (res.status >= 400) {
+          self.config.logger.error(String(res.status), res.text);
+          return fn(new Error('Invalid response'), res.text);
+        }
+        return fn(null, self.serializeResponse(origUrls, res.text))
+       });
+  } else {
+    return fn(null, self.serializeResponse(origUrls, '[]'));
+  }
   return q;
 };
 

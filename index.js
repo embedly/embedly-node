@@ -141,6 +141,7 @@ embedly.prototype.apiCall = function(endpoint, version, q, fn) {
     self.config.logger.debug('calling: ' + url + '?' + querystring.stringify(q));
     var req = request
       .get(url)
+      .timeout(self.config.timeout)
       .set('User-Agent', self.config.userAgent)
       .set('Accept', 'application/json');
     req.query(querystring.stringify(q));

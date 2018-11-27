@@ -1,6 +1,6 @@
 {
   "name": "embedly",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Embedly client library for node",
   "homepage": "https://github.com/embedly/embedly-node",
   "keywords": [],

@@ -18,13 +18,13 @@
     "test": "./test"
   },
   "dependencies": {
-    "lodash": "4.13.1",
-    "superagent": "1.8.3",
+    "hashish": "0.0.4",
+    "lodash": "^4.17.11",
     "sprintf": "0.1.1",
-    "hashish": "0.0.4"
+    "superagent": "^5.0.5"
   },
   "devDependencies": {
-    "mocha": "1.8.2",
+    "mocha": "^6.1.4",
     "should": "1.2.2",
     "winston": "0.8.2"
   },

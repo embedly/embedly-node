@@ -18,7 +18,7 @@
     "test": "./test"
   },
   "dependencies": {
-    "lodash": "4.13.1",
+    "lodash": "4.17.21",
     "superagent": "1.8.3",
     "sprintf": "0.1.1",
     "hashish": "0.0.4"
